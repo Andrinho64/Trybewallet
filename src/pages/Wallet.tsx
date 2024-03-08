@@ -1,5 +1,12 @@
+import store from '../redux';
+
 function Wallet() {
-  return <div>TrybeWallet</div>;
+  const { user } = store.getState();
+  return (
+    <div>
+      TrybeWallet
+    </div>
+  );
 }
 
 export default Wallet;
