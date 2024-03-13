@@ -58,7 +58,7 @@ function WalletForm() {
   };
 
   return (
-    <div>
+    <div data-testid="render-walletform">
       <div>WalletForm</div>
       <input
         data-testid="value-input"

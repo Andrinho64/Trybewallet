@@ -1,62 +1,7 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import store from '../redux';
-import WalletForm from '../components/WalletForm';
-import {
-  currencySuccess,
-  expenseConstructor,
-} from '../redux/actions';
-
-// Teste para o componente WalletForm
-test('renders WalletForm component', async () => {
-  const { getByText, getByTestId } = render(
-    <Provider store={ store }>
-      <WalletForm />
-    </Provider>,
-  );
-
-  const addButton = getByText('Adicionar despesa');
-  const valueInput = getByTestId('value-input');
-  const descriptionInput = getByTestId('description-input');
-
-  fireEvent.change(valueInput, { target: { value: '100' } });
-  fireEvent.change(descriptionInput, { target: { value: 'Test description' } });
-
-  fireEvent.click(addButton);
-
-  // Espera a próxima renderização do componente após a adição da despesa
-  await waitFor(() => {
-    expect(getByText('Test description')).toBeInTheDocument();
-  });
-});
-
-// Teste para a action currencySuccess
-test.skip('currencySuccess action', () => {
-  const keys: any = ['USD', 'EUR', 'GBP'];
-  const action = currencySuccess(keys);
-  expect(action.type).toEqual('CURRENCY_SUCCESS');
-  expect(action.payload).toEqual(keys);
-});
-
-// Teste para a action expenseConstructor
-test('expenseConstructor action', () => {
-  const expense : any = {
-    description: 'Test expense',
-    currency: 'USD',
-    method: 'Credit card',
-    tag: 'Food',
-    value: '100',
-    id: 1,
-  };
-  const action = expenseConstructor(expense);
-  expect(action.type).toEqual('EXPENSE_CONSTRUCTOR');
-  expect(action.payload).toEqual(expense);
-});
-
-/* import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 import mockData from './helpers/mockData';
@@ -75,10 +20,28 @@ test('Espera-se que na página inicial, tenha o texto "Login"', async () => {
   expect(screen.getByText(/Senha:/i)).toBeInTheDocument();
 });
 
-test('Espera-se que na página inicial, tenha o texto "Login"', async () => {
+test('Espera-se que na página Carteira, seja possível adicionar a descrição da despesa', async () => {
   const dataTestIdDescription = 'description-input';
-  renderWithRouterAndRedux(<Wallet />);
-  expect(screen.getByText(/Dinheiro/i)).toBeInTheDocument();
+  const { getByText, getByTestId, findByTestId } = renderWithRouterAndRedux(
+    <App />,
+  );
+
+  const usernameInput = getByTestId('email-input') as HTMLInputElement;
+  const passwordInput = getByTestId('password-input') as HTMLInputElement;
+  fireEvent.change(usernameInput, { target: { value: 'srteste@testado.com' } });
+  fireEvent.change(passwordInput, { target: { value: 'suasenha' } });
+
+  // Submeter o formulário de login
+  const loginButton = getByText('Entrar');
+  fireEvent.click(loginButton);
+
+  // Aguardar a renderização da página de despesas
+  await waitFor(() => expect(getByTestId('render-walletform')).toBeInTheDocument());
+
+  // Verificar se o componente de descrição de despesa está presente e funcionando corretamente
+  const input = getByTestId(dataTestIdDescription) as HTMLInputElement;
+  fireEvent.change(input, { target: { value: 'Descrição Teste' } });
+  expect(input.value).toBe('Descrição Teste');
 });
 
 // Teste para a action currencySuccess
@@ -102,4 +65,4 @@ test('expenseConstructor action', () => {
   const action = expenseConstructor(expense);
   expect(action.type).toEqual('EXPENSE_CONSTRUCTOR');
   expect(action.payload).toEqual(expense);
-}); */
+});
