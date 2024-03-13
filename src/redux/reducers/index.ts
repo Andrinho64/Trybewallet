@@ -6,8 +6,8 @@
 
 import { combineReducers } from 'redux';
 import user from './user';
-// import wallet from './wallet';
+import wallet from './wallet';
 
-const reducer = combineReducers({ user }); // colocar wallet depois
+const reducer = combineReducers({ user, wallet }); // colocar wallet depois
 
 export default reducer;

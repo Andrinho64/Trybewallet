@@ -1,5 +1,7 @@
-import { fetchAPI } from '../../services/awesomeapi';
+import { IExpensive, Keys } from '../types';
+// import { getCurencyFormatInput } from '../../utils/servicesCurencies';
 
+// Action types
 export const SAVE_EMAIL = 'SAVE_EMAIL';
 export const CURRENCY_SUCCESS = 'CURRENCY_SUCCESS';
 export const CURRENCY_ERROR = 'CURRENCY_ERROR';
@@ -10,7 +12,7 @@ export const saveEmail = (currentEmail: any) => ({
   payload: currentEmail,
 });
 
-export const currencySuccess = (payload: any) => ({
+export const currencySuccess = (payload: Keys[]) => ({
   type: CURRENCY_SUCCESS,
   payload,
 });
@@ -20,16 +22,7 @@ export const currencyError = (payload: any) => ({
   payload,
 });
 
-export const expenseConstructor = (currentState: any) => ({
+export const expenseConstructor = (currentState: IExpensive) => ({
   type: EXPENSE_CONSTRUCTOR,
   payload: currentState,
 });
-
-export const getCurrenciesThunk = () => async (dispatch: any) => {
-  try {
-    const response = await fetchAPI();
-    dispatch(currencySuccess(response));
-  } catch (error) {
-    dispatch(currencyError(error));
-  }
-};
