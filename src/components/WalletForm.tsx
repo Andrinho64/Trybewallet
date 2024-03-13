@@ -13,27 +13,33 @@ function WalletForm() {
   const [paymentMethod, setPaymentMethod] = useState('Dinheiro');
   const [descriptionInput, setDescriptionInput] = useState('');
   const [category, setCategory] = useState('');
+  const [apiCalled, setApiCalled] = useState(false); // State para controlar se a API foi chamada
+
   const dispatch = useDispatch();
   const storeGlobal = useSelector((state: IStorage) => state.wallet.expenses);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getCurency();
-        const initialData = await getCurencyFormatInput();
-        dispatch(currencySuccess(initialData));
-        setCurrencies(response);
-      } catch (error) {
-        console.error('Error fetching currencies:', error);
-      }
-    };
-    fetchData();
-  }, [dispatch]);
+    if (!apiCalled) { // Verifica se a API já foi chamada
+      const fetchData = async () => {
+        try {
+          const response = await getCurency();
+          const initialData = await getCurencyFormatInput();
+          dispatch(currencySuccess(initialData));
+          setCurrencies(response);
+          setApiCalled(true); // Marca a API como chamada
+        } catch (error) {
+          console.error('Error fetching currencies:', error);
+        }
+      };
+      fetchData();
+    }
+  }, [dispatch, apiCalled]); // Dependência do useEffect inclui apiCalled
 
   const handleCustom = (e: any) => {
     const { value } = e.target;
     setCurrencyInput(value);
   };
+
   const handleClick = async () => {
     const response = await fetchAPI();
     dispatch(
@@ -75,9 +81,7 @@ function WalletForm() {
           <option key={ currency.code } value={ currency.code }>
             {currency.name}
             {' '}
-            (
             {currency.code}
-            )
           </option>
         ))}
       </select>
