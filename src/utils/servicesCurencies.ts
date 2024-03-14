@@ -8,6 +8,9 @@ let currencyData: Currency[] | null = null;
 let formatInputData: Keys[] | null = null;
 
 export const getValueConvert = (el: IExpensive) => {
+  if (!el.exchangeRates[el.currency]?.ask) {
+    return 0;
+  }
   const sum = Number(el.value) * Number(el.exchangeRates[el.currency].ask);
   return sum;
 };

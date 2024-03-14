@@ -1,9 +1,17 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IStorage } from '../redux/types';
 import { getValueConvert } from '../utils/servicesCurencies';
+import { expenseDelete } from '../redux/actions';
 
 function Table() {
   const storeGlobal = useSelector((state: IStorage) => state.wallet.expenses);
+
+  const dispatch = useDispatch();
+  const handleClick = (id: number) => {
+    dispatch(
+      expenseDelete({ id }),
+    );
+  };
 
   return (
     <>
@@ -23,16 +31,24 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {storeGlobal.map((el, i) => (
-            <tr key={ i }>
-              <td>{ el.description }</td>
-              <td>{ el.tag }</td>
-              <td>{ el.method }</td>
-              <td>{ Number(el.value).toFixed(2) }</td>
-              <td>{ el.exchangeRates[el.currency].name }</td>
-              <td>{ Number(el.exchangeRates[el.currency].ask).toFixed(2) }</td>
-              <td>{ Number(getValueConvert(el)).toFixed(2) }</td>
+          {storeGlobal.map((expense) => (
+            <tr key={ expense.id }>
+              <td>{ expense.description }</td>
+              <td>{ expense.tag }</td>
+              <td>{ expense.method }</td>
+              <td>{ Number(expense.value).toFixed(2) }</td>
+              <td>{ expense.exchangeRates[expense.currency].name }</td>
+              <td>{ Number(expense.exchangeRates[expense.currency].ask).toFixed(2) }</td>
+              <td>{ Number(getValueConvert(expense)).toFixed(2) }</td>
               <td>Real</td>
+              <td>
+                <button
+                  data-testid="delete-btn"
+                  onClick={ () => handleClick(expense.id) }
+                >
+                  Excluir
+                </button>
+              </td>
             </tr>)) }
         </tbody>
       </table>

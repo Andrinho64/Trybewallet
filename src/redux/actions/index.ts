@@ -6,6 +6,7 @@ export const SAVE_EMAIL = 'SAVE_EMAIL';
 export const CURRENCY_SUCCESS = 'CURRENCY_SUCCESS';
 export const CURRENCY_ERROR = 'CURRENCY_ERROR';
 export const EXPENSE_CONSTRUCTOR = 'EXPENSE_CONSTRUCTOR';
+export const EXPENSE_DELETE = 'EXPENSE_DELETE';
 
 export const saveEmail = (currentEmail: any) => ({
   type: SAVE_EMAIL,
@@ -25,4 +26,9 @@ export const currencyError = (payload: any) => ({
 export const expenseConstructor = (currentState: IExpensive) => ({
   type: EXPENSE_CONSTRUCTOR,
   payload: currentState,
+});
+
+export const expenseDelete = (payload: any) => ({
+  type: EXPENSE_DELETE,
+  payload,
 });

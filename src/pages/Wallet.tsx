@@ -12,7 +12,6 @@ function Wallet() {
 
   const getSome = () => {
     const totalExpenses = storeExpense.reduce((prev: number, cur: IExpensive): number => {
-      console.log(cur);
       const sum = getValueConvert(cur);
       const soma = prev + sum;
       return Number(soma);
