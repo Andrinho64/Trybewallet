@@ -100,6 +100,7 @@ function WalletForm() {
         id="tag-select"
         name="tag"
         data-testid="tag-input"
+        value={ category }
         onChange={ (v) => setCategory(v.target.value) }
       >
         <option value="Alimentação">Alimentação</option>

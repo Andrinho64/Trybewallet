@@ -2,10 +2,15 @@
 
 import { fetchAPI } from '../services/awesomeapi';
 import { Currency } from '../components/types';
-import { Keys } from '../redux/types';
+import { IExpensive, Keys } from '../redux/types';
 
 let currencyData: Currency[] | null = null;
 let formatInputData: Keys[] | null = null;
+
+export const getValueConvert = (el: IExpensive) => {
+  const sum = Number(el.value) * Number(el.exchangeRates[el.currency].ask);
+  return sum;
+};
 
 export const getCurency = async (): Promise<Currency[]> => {
   if (currencyData === null) {

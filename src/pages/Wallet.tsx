@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import WalletForm from '../components/WalletForm';
-import { IStorage } from '../redux/types';
+import { IExpensive, IStorage } from '../redux/types';
+import Table from '../components/Table';
+import { getValueConvert } from '../utils/servicesCurencies';
 
 function Wallet() {
   const [currency, setCurrency] = useState('BRL');
@@ -9,11 +11,12 @@ function Wallet() {
   const storeExpense = useSelector((state: IStorage) => state.wallet.expenses);
 
   const getSome = () => {
-    const totalExpenses = storeExpense.reduce((prev, cur) => {
-      const sum = Number(cur.value) * Number(cur.exchangeRates[cur.currency].ask);
-      return prev + sum;
+    const totalExpenses = storeExpense.reduce((prev: number, cur: IExpensive): number => {
+      console.log(cur);
+      const sum = getValueConvert(cur);
+      const soma = prev + sum;
+      return Number(soma);
     }, 0);
-    console.log(storeExpense);
     return totalExpenses;
   };
 
@@ -28,13 +31,14 @@ function Wallet() {
           {userEmail}
         </section>
         <section data-testid="total-field">
-          {getSome().toFixed(2)}
+          { getSome().toFixed(2) }
         </section>
         <section data-testid="header-currency-field">
           {currency}
         </section>
       </header>
       <WalletForm />
+      <Table />
     </>
   );
 }
